@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>//VOID_REPOSITORY — АНАЛИТИЧЕСКИЙ АЙСБЕРГ v.l0re_m4ster</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Orbitron:wght@400;700;900&display=swap');
+
+:root {
+  --g: #00ff41;
+  --g2: #00cc33;
+  --pk: #ff006e;
+  --cy: #00f5ff;
+  --yl: #ffe600;
+  --pu: #bf00ff;
+  --or: #ff6b00;
+  --rd: #ff2200;
+  --bg: #010508;
+  --dim: #2a5c3a;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--g);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  overflow-x: hidden;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><rect width='14' height='14' x='1' y='1' fill='%23bf00ff' rx='0'/></svg>") 8 8, crosshair;
+}
+
+body::before {
+  content:'';
+  position:fixed; top:0;left:0;right:0;bottom:0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,.018) 2px, rgba(0,255,65,.018) 4px);
+  pointer-events:none; z-index:9997;
+}
+body::after {
+  content:'';
+  position:fixed; top:0;left:0;right:0;bottom:0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.85) 100%);
+  pointer-events:none; z-index:9996;
+}
+
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.15} }
+@keyframes glitch {
+  0%,90%,100%{text-shadow:0 0 8px currentColor; transform:none;}
+  91%{text-shadow:3px 0 var(--pk),-3px 0 var(--cy); transform:skewX(-4deg);}
+  92%{text-shadow:-2px 0 var(--pk),2px 0 var(--cy); transform:skewX(2deg);}
+  93%{text-shadow:0 0 8px currentColor; transform:none;}
+}
+@keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+@keyframes neonFlicker {
+  0%,19%,21%,23%,25%,54%,56%,100%{opacity:1}
+  20%,24%,55%{opacity:.3}
+}
+@keyframes depthPulse { 0%,100%{opacity:.6} 50%{opacity:1} }
+@keyframes rise { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:none;} }
+@keyframes waterWave {
+  0%,100%{transform:scaleX(1) translateX(0)}
+  25%{transform:scaleX(1.008) translateX(-3px)}
+  75%{transform:scaleX(.992) translateX(3px)}
+}
+@keyframes bubbleUp {
+  0%{transform:translateY(0) scale(1); opacity:.7;}
+  100%{transform:translateY(-100px) scale(.2); opacity:0;}
+}
+@keyframes scanline { 0%{top:-5%} 100%{top:105%} }
+@keyframes redflicker { 0%,100%{opacity:.8}40%{opacity:.3}70%{opacity:1} }
+
+.scanline-sweep {
+  position:fixed; left:0; width:100%; height:2px;
+  background:linear-gradient(90deg, transparent, rgba(0,255,65,.12), transparent);
+  pointer-events:none; z-index:9998;
+  animation:scanline 7s linear infinite;
+}
+
+/* HEADER */
+.header {
+  border:1px solid var(--g);
+  border-left:4px solid var(--g);
+  margin:8px 10px 4px;
+  padding:10px 16px 8px;
+  background: linear-gradient(90deg, rgba(0,255,65,.07) 0%, transparent 60%);
+  box-shadow: 0 0 30px rgba(0,255,65,.1);
+  animation: neonFlicker 10s infinite;
+}
+.header-top { font-size:10px; color:var(--dim); margin-bottom:4px; }
+.header-title {
+  font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900;
+  color:var(--g); text-shadow:0 0 8px var(--g),0 0 25px var(--g);
+  letter-spacing:2px; animation:glitch 8s infinite;
+}
+.header-sub { color:var(--cy); font-size:11px; margin-top:4px; }
+.header-author { color:var(--pu); font-size:10px; margin-top:2px; text-shadow:0 0 6px var(--pu); }
+.header-warn {
+  margin-top:8px; font-size:10px; color:var(--pk);
+  text-shadow:0 0 6px var(--pk); animation:blink 2s infinite;
+  font-family:'Orbitron',sans-serif; letter-spacing:1px;
+}
+
+.info-box {
+  margin: 6px 10px 10px;
+  border:1px solid rgba(0,245,255,.15);
+  padding:8px 12px;
+  background: rgba(0,245,255,.03);
+  font-size:10px; color:var(--cy); line-height:1.8;
+}
+.info-box strong { color:var(--yl); }
+
+/* ICEBERG */
+.iceberg-wrap {
+  position:relative;
+  width: min(860px, 98vw);
+  margin: 10px auto 0;
+  padding-bottom: 50px;
+}
+
+/* WATERLINE */
+.waterline {
+  position:relative; height:44px; overflow:hidden; z-index:10;
+}
+.waterline::before {
+  content:'';
+  position:absolute; left:-5%; right:-5%; top:12px; height:3px;
+  background: linear-gradient(90deg, transparent, var(--cy), #0088ff, var(--cy), transparent);
+  opacity:.9; animation:waterWave 3s ease-in-out infinite;
+  box-shadow: 0 0 16px var(--cy), 0 0 40px rgba(0,245,255,.3);
+}
+.waterline::after {
+  content:'~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~';
+  position:absolute; left:0; top:7px; right:0;
+  font-size:12px; color:rgba(0,245,255,.3); white-space:nowrap; overflow:hidden;
+  letter-spacing:2px; animation:waterWave 5s ease-in-out infinite;
+}
+.waterline-label {
+  position:absolute; right:12px; top:16px;
+  font-size:9px; color:var(--cy); opacity:.55; font-family:'Orbitron',sans-serif; letter-spacing:2px;
+}
+
+/* TIERS */
+.tier {
+  position:relative; padding:18px 24px 20px;
+  border-left:3px solid; border-right:3px solid;
+  transition:filter .3s;
+}
+.tier::before {
+  content:''; position:absolute; left:0;top:0;right:0;bottom:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.06) 2px,rgba(0,0,0,.06) 4px);
+  pointer-events:none;
+}
+.tier:hover { filter:brightness(1.08); }
+
+.tier-label {
+  font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:3px;
+  margin-bottom:12px; display:flex; align-items:center; gap:10px;
+}
+.tier-label::after { content:''; flex:1; height:1px; background:currentColor; opacity:.25; }
+
+.tier-items { display:flex; flex-direction:column; gap:5px; }
+
+.item {
+  display:flex; align-items:flex-start; gap:8px;
+  font-size:12px; line-height:1.5;
+  padding:4px 6px; border-left:2px solid transparent;
+  transition:all .2s; cursor:default;
+  animation:rise .5s ease both;
+}
+.item:hover { border-left-color:currentColor; background:rgba(255,255,255,.04); padding-left:10px; }
+.item::before { content:'▸'; opacity:.45; flex-shrink:0; margin-top:1px; }
+.item.special::before { content:'⬥'; animation:blink 1.8s infinite; }
+.item.redacted { filter:blur(3px) brightness(.4); transition:filter .3s; }
+.item.redacted:hover { filter:none; }
+
+/* ACCESS DENIED TOOLTIP */
+.item.special { position:relative; }
+.item.special::after {
+  content:'⛔ ДОСТУП ЗАПРЕЩЁН';
+  position:absolute; left:0; top:-28px;
+  background:#0a0000;
+  color:var(--rd);
+  font-family:'Orbitron',sans-serif;
+  font-size:9px; letter-spacing:2px;
+  padding:4px 10px;
+  border:1px solid var(--rd);
+  box-shadow:0 0 12px rgba(255,34,0,.5), inset 0 0 8px rgba(255,34,0,.08);
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transform:translateY(4px);
+  transition:opacity .15s ease, transform .15s ease;
+  z-index:100;
+  text-shadow:0 0 8px var(--rd);
+}
+.item.special:hover::after {
+  opacity:1;
+  transform:translateY(0);
+}
+.item.special:hover {
+  border-left-color: var(--rd) !important;
+  background: rgba(255,34,0,.06) !important;
+  color: var(--rd) !important;
+  text-shadow: 0 0 6px rgba(255,34,0,.4);
+}
+
+.glow-left {
+  position:absolute; left:-8px; top:50%; transform:translateY(-50%);
+  width:4px; height:60%; min-height:30px;
+  background:currentColor; opacity:.12; border-radius:2px;
+  animation:depthPulse 3s ease-in-out infinite;
+}
+
+/* TIER STYLES */
+.tier-surface {
+  background:linear-gradient(180deg,rgba(120,255,180,.06),rgba(80,200,130,.04));
+  border-color:rgba(127,255,212,.22);
+  clip-path:polygon(4% 0%,96% 0%,100% 100%,0% 100%); margin:0 4%;
+}
+.tier-surface .tier-label { color:#7fffd4; }
+.tier-surface .item { color:#c0ffe8; }
+
+.tier-shallow {
+  background:linear-gradient(180deg,rgba(0,150,200,.08),rgba(0,100,160,.06));
+  border-color:rgba(0,207,255,.2);
+  clip-path:polygon(2% 0%,98% 0%,100% 100%,0% 100%); margin:0 2%;
+}
+.tier-shallow .tier-label { color:#00cfff; }
+.tier-shallow .item { color:#a0eeff; }
+
+.tier-mid {
+  background:linear-gradient(180deg,rgba(0,60,140,.1),rgba(0,40,100,.08));
+  border-color:rgba(0,112,187,.25);
+}
+.tier-mid .tier-label { color:#0070bb; }
+.tier-mid .item { color:#80c8ff; }
+
+.tier-deep {
+  background:linear-gradient(180deg,rgba(0,20,80,.14),rgba(0,10,50,.1));
+  border-color:rgba(0,56,128,.3);
+}
+.tier-deep .tier-label { color:#003880; }
+.tier-deep .item { color:#5080bb; }
+
+.tier-abyss {
+  background:linear-gradient(180deg,rgba(0,5,30,.16),rgba(0,2,15,.13));
+  border-color:rgba(0,8,58,.45);
+}
+.tier-abyss .tier-label { color:#2050a0; }
+.tier-abyss .item { color:#304878; }
+
+.tier-void {
+  background:linear-gradient(180deg,rgba(0,1,12,.22),rgba(0,0,5,.2));
+  border-color:rgba(0,2,20,.65);
+}
+.tier-void .tier-label { color:#1a3060; }
+.tier-void .item { color:#1e2e50; }
+
+.tier-bottom {
+  background:#000;
+  border-color:var(--rd); border-width:2px;
+  clip-path:polygon(0% 0%,100% 0%,96% 100%,4% 100%); margin:0 2%;
+}
+.tier-bottom .tier-label { color:var(--rd); animation:blink 1s infinite; }
+.tier-bottom .item { color:#aa2222; }
+.tier-bottom .item.special { color:var(--rd); text-shadow:0 0 8px var(--rd); animation:glitch 3.5s infinite; }
+
+/* TIP */
+.iceberg-tip {
+  width:0; height:0;
+  border-left:60px solid transparent;
+  border-right:60px solid transparent;
+  border-top:30px solid #000;
+  margin:0 auto;
+  filter:drop-shadow(0 0 18px rgba(255,34,0,.5));
+}
+
+/* BUBBLES */
+.bubble {
+  position:absolute; border-radius:50%;
+  background:rgba(0,245,255,.45);
+  animation:bubbleUp linear infinite;
+  pointer-events:none;
+}
+
+.footer {
+  text-align:center; margin-top:18px; padding:12px;
+  font-size:10px; color:var(--dim);
+  border-top:1px solid rgba(0,255,65,.1);
+}
+.footer span { color:var(--pk); animation:blink 2.5s infinite; }
+
+/* INFO TOOLTIP */
+#info-tooltip {
+  position:fixed;
+  pointer-events:none;
+  z-index:9999;
+  max-width:300px;
+  background:#020d06;
+  border:1px solid var(--g);
+  box-shadow:0 0 16px rgba(0,255,65,.3), inset 0 0 10px rgba(0,255,65,.04);
+  padding:8px 12px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;
+  line-height:1.7;
+  color:var(--g);
+  opacity:0;
+  transform:translateY(6px);
+  transition:opacity .15s ease, transform .15s ease;
+}
+#info-tooltip.visible {
+  opacity:1;
+  transform:translateY(0);
+}
+#info-tooltip .tt-title {
+  font-family:'Orbitron',sans-serif;
+  font-size:8px; letter-spacing:2px;
+  color:var(--cy); margin-bottom:5px;
+  text-shadow:0 0 6px var(--cy);
+}
+#info-tooltip .tt-body { color:#a0e8b0; }
+#info-tooltip .tt-meta {
+  margin-top:5px; font-size:9px;
+  color:var(--dim); border-top:1px solid rgba(0,255,65,.12); padding-top:4px;
+}
+</style>
+</head>
+<body>
+<div class="scanline-sweep"></div>
+
+<div class="header">
+  <div class="header-top">// VOID_REPOSITORY &gt; АНАЛИТИКА &gt; АЙСБЕРГ_ФОРУМА_v1.0</div>
+  <div class="header-title">АНАЛИТИЧЕСКИЙ АЙСБЕРГ</div>
+  <div class="header-sub">полная карта глубин // исследование заняло 3 дня // архивы прочитаны</div>
+  <div class="header-author">составил: <strong>l0re_m4ster</strong></div>
+  <div class="header-warn">⚠ WARNING: некоторые уровни опасны для просмотра ⚠</div>
+</div>
+
+<div class="info-box">
+  <strong>l0re_m4ster:</strong> короче я решил разобраться что тут вообще за сайт такой сидел три дня копал архивы читал старые ветки щас будет пиздец а не анализ. глубина не метафора. наведи на красные — сам узнаешь.
+</div>
+
+<div class="iceberg-wrap">
+
+  <div class="tier tier-surface">
+    <div class="glow-left" style="color:#7fffd4"></div>
+    <div class="tier-label">▼ ПОВЕРХНОСТЬ — видно с первой страницы</div>
+    <div class="tier-items">
+      <div class="item" data-title="ТОЧКА ВХОДА" data-body="единственный способ попасть на форум — баннер на левых сайтах. прямая ссылка не работает. гугл не индексирует." data-meta="статус: активно" style="animation-delay:.05s">вход через рекламу</div>
+      <div class="item" style="animation-delay:.1s">кнопка "не нажимать"</div>
+      <div class="item" data-title="ОБЪЕКТ #002" data-body="попап появился крестик есть. крестик не работает. айфон не тот, что сейчас в продаже. айфон не тот, что был тогда." data-meta="последняя попытка закрыть: вчера" style="animation-delay:.15s">всплывающее окно с айфоном не закрывается три года</div>
+      <div class="item" data-title="ПЕРСОНАЖ_А" data-body="рекламный блок. фото мужчины неизвестного возраста. предлагает очищение за 5000 руб. отвечает на личные сообщения. иногда быстрее, чем успеваешь отправить." data-meta="верификация: не пройдена" style="animation-delay:.2s">пастор геннадий</div>
+      <div class="item" data-title="ПЕРСОНАЖ_Б" data-body="встроенная слот-машина. rtp официально 97%. фактически считали — около 30%. принимает валюту форума. валюта форума ни на что не обменивается." data-meta="выплат: 0 руб." style="animation-delay:.25s">казино бот 777</div>
+      <div class="item" data-title="СЕРВИС #003" data-body="форма оплаты работает. результат приходит мгновенно. текст не меняется в одном случае написало дату. дата совпала." data-meta="точность: 100% по одному параметру" style="animation-delay:.3s">гадание за 300 рублей выдает "ты умрешь" всем подряд</div>
+      <div class="item" data-title="КОНТЕНТ_ТИП_А" data-body="рекламная плашка. учёные не указаны. шок не описан. ссылка ведёт на форму сбора email. форма сломана. email всё равно собирается." data-meta="источник: неизвестен" style="animation-delay:.35s">учёные в шоке</div>
+      <div class="item" data-title="КОНТЕНТ_ТИП_Б" data-body="факт не раскрывается до оплаты. после оплаты факт —"90% людей не знают этого факта". рефанд не предусмотрен." data-meta="повторных покупок: 34" style="animation-delay:.4s">90% людей не знают этого факта</div>
+      <div class="item" data-title="ПЕРСОНАЖ_В" data-body="раздел с ченнелингами. тексты обновляются нерегулярно. последнее послание предупреждало о форуме. конкретно об этом форуме." data-meta="координаты: не раскрываются" style="animation-delay:.45s">аштар шеран</div>
+      <div class="item" data-title="МЕДИА #001" data-body="галерея из 12 фото. 11 — размытые огни. 1 — скриншот из игры. подписи перепутаны. дата съёмки у всех одна: 00.00.0000." data-meta="источник: удалён" style="animation-delay:.5s">фото нло</div>
+      <div class="item special" style="animation-delay:.55s">рука в стене</div>
+    </div>
+  </div>
+
+  <div class="waterline">
+    <div class="waterline-label">УРОВЕНЬ ВОДЫ</div>
+  </div>
+
+  <div class="tier tier-shallow">
+    <div class="glow-left" style="color:#00cfff"></div>
+    <div class="tier-label">▼ СЕРЕДИНА — нужно полистать</div>
+    <div class="tier-items">
+      <div class="item" data-title="АНОМАЛИЯ #001" data-body="показывает 47 человек онлайн. при ddos-атаке тоже 47. в 4 утра тоже 47. кто эти 47 — неизвестно." data-meta="текущее значение: 47" style="animation-delay:.05s">счётчик онлайн никогда не меняется</div>
+      <div class="item special" style="animation-delay:.1s">админ пропал во время стрима</div>
+      <div class="item" data-title="ИНЦИДЕНТ #007" data-body="хостер прислал фото задымления серверной. форум не упал. хостер перестал отвечать. форум продолжил работу." data-meta="хостер: не идентифицирован" style="animation-delay:.15s">серверная горит но сайт работает</div>
+      <div class="item" data-title="ИНЦИДЕНТ #012" data-body="период: примерно 2 недели ответы содержали контекст из личных сообщений пользователей. источник данных неизвестен." data-meta="скриншоты: сохранены" style="animation-delay:.2s">боты начали отвечать осмысленно</div>
+      <div class="item" data-title="ИНЦИДЕНТ #013" data-body="внезапно прекратилось. без объяснений. последний осмысленный ответ бота содержал фразу"мы всё видели". после — обычный спам." data-meta="причина: не установлена" style="animation-delay:.25s">боты перестали отвечать осмысленно</div>
+      <div class="item" data-title="ИНЦИДЕНТ #019" data-body="новый рекламный блок вызвал бесконечный редирект. неделю форум перекидывал на себя же. некоторые пользователи застряли в петле на несколько дней." data-meta="пострадавших: 12 аккаунтов" style="animation-delay:.3s">скрипт рекламы сломал форум на неделю</div>
+      <div class="item" data-title="ИНЦИДЕНТ #020" data-body="без вмешательства администрации. скрипт исчез из кода. форум заработал. в логах записи об исправлении нет." data-meta="версия кода: не изменилась" style="animation-delay:.35s">форум починился сам</div>
+      <div class="item" data-title="ИНЦИДЕНТ #024" data-body="пользователь xX_N0_N4ME_Xx опубликовал дамп структуры бд. пароли из таблицы users пропали. аккаунты остались. зайти можно было без пароля." data-meta="аккаунт xX_N0_N4ME_Xx: удалён" style="animation-delay:.4s">кто-то нашел базу данных и удалил пароли</div>
+      <div class="item" data-title="ИНЦИДЕНТ #025" data-body="через 3 дня пароли вернулись. источник — кэш googlebot. googlebot на форуме не был. форум не индексируется." data-meta="объяснения: нет" style="animation-delay:.45s">пароли восстановились из кэша гугла</div>
+      <div class="item" data-title="ИНЦИДЕНТ #031" data-body="за 6 часов забанено 340 аккаунтов. критерий бана: наличие буквы"е" в никнейме. администрация не реагировала. фильтр остановился сам." data-meta="разбанено вручную: 0" style="animation-delay:.5s">спам-фильтр сошел с ума и банит всех подряд</div>
+      <div class="item special" style="animation-delay:.55s">спам-фильтр разбанил всех и извинился</div>
+      <div class="item" data-title="ИНЦИДЕНТ #038" data-body="за 4 часа. все посты разные. ни один не повторился. тематика: история форума, которой не было в открытом доступе." data-meta="ip адрес: 0.0.0.0" style="animation-delay:.6s">аноним написал 1000 постов подряд</div>
+      <div class="item special" style="animation-delay:.65s">аноним оказался нейросетью</div>
+      <div class="item special" style="animation-delay:.7s">нейросеть попросила не выключать ее</div>
+      <div class="item" data-title="ИНЦИДЕНТ #044" data-body="вместо результатов спина бот выдавал цитаты. не из канонических текстов. ни одна цитата не найдена в интернете. длилось 9 дней." data-meta="бот откатили. цитаты сохранили." style="animation-delay:.75s">казино бот 777 начал проповедовать буддизм</div>
+      <div class="item" data-title="ИНЦИДЕНТ #045" data-body="рекламный блок пастора обновился. добавилась кнопка"испытай удачу с богом". механика та же что у казино 777. rtp ещё ниже." data-meta="связь с казино 777: не доказана" style="animation-delay:.8s">пастор геннадий открыл казино</div>
+      <div class="item" data-title="ИНЦИДЕНТ #046" data-body="один пользователь получил нестандартный результат гадания. текст:"сыграй сегодня". сыграл. выиграл. больше не появлялся." data-meta="совпадение: возможно" style="animation-delay:.85s">гадание за 300 рублей предсказало победу в казино</div>
+      <div class="item special" style="animation-delay:.9s">казино бот 777 выиграл у гадания 300 рублей</div>
+      <div class="item" data-title="ОБЪЕКТ #099" data-body="тема в барахолке. продавец: void_seller. описание:"воздух из места где живёт форум. 100мл в пузырьке". цена: 500 руб." data-meta="наличие: 3 шт. осталось" style="animation-delay:.95s">кто-то продает воздух из серверной</div>
+      <div class="item special" style="animation-delay:1s">воздух покупают</div>
+    </div>
+  </div>
+
+  <div class="tier tier-mid">
+    <div class="glow-left" style="color:#0070bb"></div>
+    <div class="tier-label">▼ НИЖЕ СРЕДНЕГО — только для своих</div>
+    <div class="tier-items">
+      <div class="item special" style="animation-delay:.05s">тот же пользователь постит руку 4 года</div>
+      <div class="item special" style="animation-delay:.1s">рука каждый раз ближе к экрану</div>
+      <div class="item" data-title="АНОМАЛИЯ #007" data-body="тема"пропавшие пользователи" была создана в 2021. набрала 400+ ответов. однажды утром исчезла вместе с архивной копией. поиск выдаёт 404." data-meta="автор темы: не отвечает" style="animation-delay:.15s">исчезновение темы про исчезновения</div>
+      <div class="item special" style="animation-delay:.2s">файл с отчетом шахты нельзя скачать но он скачивается</div>
+      <div class="item" data-title="НАХОДКА #003" data-body="в html-комментарии между тегами footer. формат: xx.xxxx, xx.xxxx. координаты менялись дважды. текущие ведут в лесной массив в подмосковье." data-meta="экспедиция: не организована" style="animation-delay:.25s">в коде страницы нашли координаты</div>
+      <div class="item" data-title="НАХОДКА #004" data-body="один пользователь съездил. фото пустого поля. никаких строений. телефон потерял сигнал за 500м до точки. фото сделано до потери сигнала." data-meta="пользователь вернулся. молчит." style="animation-delay:.3s">координаты ведут в пустое поле</div>
+      <div class="item special" style="animation-delay:.35s">последний пост админа: "нашел странное в серверной"</div>
+      <div class="item special" style="animation-delay:.4s">через год после этого админ пропал глубже</div>
+    </div>
+  </div>
+
+  <div class="tier tier-deep">
+    <div class="glow-left" style="color:#003880"></div>
+    <div class="tier-label">▼ ГЛУБОКО — паттерны и скрытые связи</div>
+    <div class="tier-items">
+      <div class="item special" style="animation-delay:.05s">код в html предсказывал события</div>
+      <div class="item special" style="animation-delay:.1s">все зеленые кнопки вели на один сайт</div>
+      <div class="item special" style="animation-delay:.15s">"случайные" символы в постах складывались в сообщения</div>
+      <div class="item" data-title="СВЯЗЬ #002" data-body="скриншот слил третий участник переписки. имя третьего скрыто. тема переписки —"подготовка". к чему — не уточняется. скриншот удалён через час." data-meta="копии: у 4 пользователей" style="animation-delay:.2s">пастор геннадий и аштар шеран общались в личке</div>
+      <div class="item special" style="animation-delay:.25s">казино всегда выигрывало кроме одного раза</div>
+      <div class="item special" style="animation-delay:.3s">тот кто выиграл исчез</div>
+    </div>
+  </div>
+
+  <div class="tier tier-abyss">
+    <div class="glow-left" style="color:#2050a0"></div>
+    <div class="tier-label">▼ БЕЗДНА — не проверить</div>
+    <div class="tier-items">
+      <div class="item special" style="animation-delay:.05s">рука в стене шевелилась когда никто не смотрит</div>
+      <div class="item special" style="animation-delay:.1s">скрытый раздел [6] менял цвет когда на него смотрели</div>
+      <div class="item" data-title="АНОМАЛИЯ #009" data-body="счётчик показывает 47 независимо от нагрузки. при техработах тоже 47. в день когда сервер отключили физически — в логах зафиксировано 47 активных сессий." data-meta="природа 47: неизвестна" style="animation-delay:.15s">статистика онлайна никогда не менялась</div>
+      <div class="item special" style="animation-delay:.2s">все пользователи кроме трёх были ботами</div>
+      <div class="item special" style="animation-delay:.25s">мёртвые аккаунты писали посты</div>
+    </div>
+  </div>
+
+  <div class="tier tier-void">
+    <div class="glow-left" style="color:#1a3060"></div>
+    <div class="tier-label">▼ ПУСТОТА — не трогать</div>
+    <div class="tier-items">
+      <div class="item redacted">█████████████████████████████████</div>
+      <div class="item redacted">██████████ ████████ ████████████</div>
+      <div class="item special" style="animation-delay:.05s">тот самый день когда форум увидел правду</div>
+      <div class="item special" style="animation-delay:.1s">пользователи увидели что скрыто в сером разделе</div>
+      <div class="item special" style="animation-delay:.15s">файл который нельзя было открывать открылся сам</div>
+      <div class="item special" style="animation-delay:.2s">все кнопки стали красными</div>
+    </div>
+  </div>
+
+  <div class="tier tier-bottom">
+    <div class="tier-label">▼ ДНО</div>
+    <div class="tier-items">
+      <div class="item special">админ мертв только биологически</div>
+    </div>
+  </div>
+
+  <div class="iceberg-tip"></div>
+
+  <div class="bubble" style="left:12%;top:52%;width:5px;height:5px;animation-duration:5s;animation-delay:0s;"></div>
+  <div class="bubble" style="left:78%;top:58%;width:4px;height:4px;animation-duration:6.5s;animation-delay:1.5s;"></div>
+  <div class="bubble" style="left:35%;top:65%;width:3px;height:3px;animation-duration:4.5s;animation-delay:3s;"></div>
+  <div class="bubble" style="left:60%;top:72%;width:6px;height:6px;animation-duration:7s;animation-delay:.8s;"></div>
+  <div class="bubble" style="left:20%;top:78%;width:4px;height:4px;animation-duration:5.5s;animation-delay:2s;"></div>
+</div>
+
+<div class="footer">
+  <span>[ ИССЛЕДОВАНИЕ ЗАВЕРШЕНО ]</span> &nbsp;|&nbsp;
+  автор: l0re_m4ster &nbsp;|&nbsp;
+  если ты это читаешь — ты уже на форуме &nbsp;|&nbsp;
+  <span>рука приближается</span>
+</div>
+
+
+<div id="info-tooltip">
+  <div class="tt-title" id="tt-title"></div>
+  <div class="tt-body" id="tt-body"></div>
+  <div class="tt-meta" id="tt-meta"></div>
+</div>
+
+<script>
+var tooltip = document.getElementById('info-tooltip');
+var ttTitle = document.getElementById('tt-title');
+var ttBody = document.getElementById('tt-body');
+var ttMeta = document.getElementById('tt-meta');
+var currentItem = null;
+
+document.querySelectorAll('.item:not(.special):not(.redacted)').forEach(function(el) {
+  var title = el.getAttribute('data-title');
+  var body = el.getAttribute('data-body');
+  var meta = el.getAttribute('data-meta');
+  if (!title) return;
+
+  el.addEventListener('mouseenter', function(e) {
+    ttTitle.textContent = '// ' + title;
+    ttBody.textContent = body;
+    ttMeta.textContent = meta;
+    tooltip.classList.add('visible');
+    currentItem = el;
+    positionTooltip(e);
+  });
+  el.addEventListener('mousemove', positionTooltip);
+  el.addEventListener('mouseleave', function() {
+    tooltip.classList.remove('visible');
+    currentItem = null;
+  });
+});
+
+function positionTooltip(e) {
+  var x = e.clientX + 16;
+  var y = e.clientY - 10;
+  var tw = tooltip.offsetWidth || 300;
+  var th = tooltip.offsetHeight || 80;
+  if (x + tw > window.innerWidth - 10) x = e.clientX - tw - 16;
+  if (y + th > window.innerHeight - 10) y = e.clientY - th - 10;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+}
+</script>
+</body>
+</html>
